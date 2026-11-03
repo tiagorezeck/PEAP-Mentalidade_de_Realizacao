@@ -1,0 +1,6 @@
+{
+  "name": "Assessment COMET — PEAP | Mentalidade de Realização",
+  "description": "Módulo de Mentalidade do Assessment COMET (PEAP) integrando os 4 instrumentos científicos: P-Scale (Positividade), ELOT (Expectativas), ASQ (Atribuições) e PCQ-24 (Recursos Psicológicos).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

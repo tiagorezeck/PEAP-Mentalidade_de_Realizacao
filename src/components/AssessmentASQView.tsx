@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, PenTool } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Brain } from 'lucide-react';
 import { ASQ_SITUATIONS } from '../data/pcq_asq_data.ts';
 import { ASQUserAnswer } from '../types/pcq_asq.ts';
 
@@ -38,7 +38,6 @@ export const AssessmentASQView: React.FC<AssessmentASQViewProps> = ({
   const currentSituation = ASQ_SITUATIONS[currentIndex];
   const existingAnswer = currentSituation ? currentAnswers[currentSituation.id] : undefined;
 
-  const [causeText, setCauseText] = useState(existingAnswer?.causeText || '');
   const [internality, setInternality] = useState<number | undefined>(existingAnswer?.internality);
   const [stability, setStability] = useState<number | undefined>(existingAnswer?.stability);
   const [globality, setGlobality] = useState<number | undefined>(existingAnswer?.globality);
@@ -48,7 +47,6 @@ export const AssessmentASQView: React.FC<AssessmentASQViewProps> = ({
   React.useEffect(() => {
     if (currentSituation) {
       const prev = currentAnswers[currentSituation.id];
-      setCauseText(prev?.causeText || '');
       setInternality(prev?.internality);
       setStability(prev?.stability);
       setGlobality(prev?.globality);
@@ -63,10 +61,6 @@ export const AssessmentASQView: React.FC<AssessmentASQViewProps> = ({
   const isLast = currentIndex === totalSituations - 1;
 
   const handleSaveAndNext = () => {
-    if (!causeText.trim()) {
-      setError('Por favor, descreva a causa principal do evento no campo de texto.');
-      return;
-    }
     if (internality === undefined || stability === undefined || globality === undefined) {
       setError('Por favor, responda aos 3 critérios de avaliação (1 a 7) para esta situação.');
       return;
@@ -75,7 +69,7 @@ export const AssessmentASQView: React.FC<AssessmentASQViewProps> = ({
     setError('');
     const newAnswer: ASQUserAnswer = {
       situationId: currentSituation.id,
-      causeText: causeText.trim(),
+      ...(existingAnswer?.causeText ? { causeText: existingAnswer.causeText } : {}),
       internality,
       stability,
       globality,
@@ -162,25 +156,20 @@ export const AssessmentASQView: React.FC<AssessmentASQViewProps> = ({
           </div>
         )}
 
-        {/* Etapa 1: Causa Principal (Texto Aberto) */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-white flex items-center gap-2">
-            <PenTool className="w-3.5 h-3.5 text-[#ff6b00]" />
-            <span>1. Escreva qual é a causa principal deste acontecimento na sua visão:</span>
-          </label>
-          <input
-            type="text"
-            value={causeText}
-            onChange={(e) => setCauseText(e.target.value)}
-            placeholder="Ex.: Meu planejamento e empenho técnico / Fatores externos de mercado..."
-            className="w-full px-4 py-3 rounded-xl bg-[#090b10] border border-[#262c3e] text-sm text-white placeholder-[#475569] focus:outline-none focus:border-[#ff6b00] transition-colors"
-          />
+        {/* Etapa 1: Âncora Mental da Causa Principal (sem digitação) */}
+        <div className="p-4 rounded-xl bg-[#0f1118] border border-[#262c3e] flex items-start gap-3">
+          <Brain className="w-4 h-4 text-[#ff6b00] shrink-0 mt-0.5" />
+          <p className="text-xs text-[#cbd5e1] leading-relaxed">
+            <strong className="text-white">Passo mental antes de marcar:</strong>{' '}
+            Imagine essa situação acontecendo com você e pense rapidamente na{' '}
+            <strong className="text-white">causa principal</strong> desse acontecimento. Com essa causa em mente, avalie nas 3 escalas abaixo:
+          </p>
         </div>
 
         {/* Etapa 2: Três Escalas de Avaliação Causal (1 a 7) */}
         <div className="space-y-6 border-t border-[#1e2332] pt-6">
           <div className="text-xs font-bold uppercase tracking-wider text-[#ff8533]">
-            Avalie a causa que você escreveu acima nas 3 dimensões (1 a 7):
+            Com base na causa que você pensou, avalie nas 3 dimensões (1 a 7):
           </div>
 
           {/* Dimensão 1: Internalidade */}

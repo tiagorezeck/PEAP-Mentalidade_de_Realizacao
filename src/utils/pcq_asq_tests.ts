@@ -139,7 +139,6 @@ export function runPCQASQValidationTests(): { results: ValidationTestResult[]; a
     for (let i = 1; i <= 12; i++) {
       asqAnswers[i] = {
         situationId: i,
-        causeText: 'Causa de teste',
         internality: 5,
         stability: 5,
         globality: 5,

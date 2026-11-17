@@ -33,7 +33,7 @@ export interface ASQSituation {
 
 export interface ASQUserAnswer {
   situationId: number; // 1 to 12
-  causeText: string; // Open text
+  causeText?: string; // Optional open text (legacy / historical compatibility)
   internality: number; // 1 to 7
   stability: number; // 1 to 7
   globality: number; // 1 to 7

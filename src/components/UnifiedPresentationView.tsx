@@ -61,7 +61,7 @@ export const UnifiedPresentationView: React.FC<UnifiedPresentationViewProps> = (
   const asqAnsweredCount = Object.keys(asqAnswers).filter(
     (key) => {
       const a = asqAnswers[Number(key)];
-      return a && a.causeText && a.causeText.trim() !== '' && a.internality > 0 && a.stability > 0 && a.globality > 0;
+      return a && a.internality > 0 && a.stability > 0 && a.globality > 0;
     }
   ).length;
   const pcq24AnsweredCount = Object.keys(pcq24Answers).length;
@@ -78,7 +78,7 @@ export const UnifiedPresentationView: React.FC<UnifiedPresentationViewProps> = (
 
   const handleASQChange = (situationId: number, field: keyof ASQUserAnswer, val: string | number) => {
     setAsqAnswers((prev) => {
-      const current = prev[situationId] || { situationId, causeText: '', internality: 0, stability: 0, globality: 0 };
+      const current = prev[situationId] || { situationId, internality: 0, stability: 0, globality: 0 };
       return {
         ...prev,
         [situationId]: {
@@ -113,7 +113,7 @@ export const UnifiedPresentationView: React.FC<UnifiedPresentationViewProps> = (
       setCurrentBlock(3);
     } else if (currentBlock === 3) {
       if (asqAnsweredCount < 12) {
-        setValidationError(`Por favor, preencha a causa e os 3 aspectos das 12 situações do Passo 3: Atribuições (ASQ). Faltam ${12 - asqAnsweredCount}.`);
+        setValidationError(`Por favor, avalie os 3 critérios (1 a 7) das 12 situações do Passo 3: Atribuições (ASQ). Faltam ${12 - asqAnsweredCount}.`);
         return;
       }
       setCurrentBlock(4);
@@ -425,13 +425,13 @@ export const UnifiedPresentationView: React.FC<UnifiedPresentationViewProps> = (
               Como você interpreta as causas dos acontecimentos positivos e negativos?
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-              Leia cada situação hipotética. Escreva a causa principal e avalie de 1 a 7 nas 3 dimensões (Internalidade, Estabilidade e Globalidade).
+              Imagine cada situação acontecendo com você. Pense mentalmente na causa principal desse acontecimento e, com base nessa causa, marque de 1 a 7 nas 3 escalas abaixo.
             </p>
           </div>
 
           <div className="space-y-8">
             {ASQ_SITUATIONS.map((sit, idx) => {
-              const currentAns = asqAnswers[sit.id] || { situationId: sit.id, causeText: '', internality: 0, stability: 0, globality: 0 };
+              const currentAns = asqAnswers[sit.id] || { situationId: sit.id, internality: 0, stability: 0, globality: 0 };
               const isPositive = sit.situationType === 'POSITIVE';
 
               return (
@@ -456,18 +456,13 @@ export const UnifiedPresentationView: React.FC<UnifiedPresentationViewProps> = (
                     "{sit.textPtBr}"
                   </p>
 
-                  {/* Causa Escrita */}
-                  <div className="mt-4 space-y-1.5">
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                      1. Qual seria a CAUSA PRINCIPAL desta situação para você? (Escreva abaixo)
-                    </label>
-                    <input
-                      type="text"
-                      value={currentAns.causeText}
-                      onChange={(e) => handleASQChange(sit.id, 'causeText', e.target.value)}
-                      placeholder="Ex: Minha dedicação continuada / Instabilidade de prazos na equipe"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                    />
+                  {/* Âncora Mental (sem necessidade de digitação) */}
+                  <div className="mt-4 px-3.5 py-2.5 rounded-xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/70 dark:border-slate-700/70 flex items-start gap-2.5">
+                    <Brain className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <strong className="text-slate-900 dark:text-white">Passo mental antes de marcar:</strong>{' '}
+                      Imagine o que mais causaria essa situação na sua vida e, mantendo essa causa em mente, marque de <strong>1 a 7</strong> nas três escalas abaixo.
+                    </p>
                   </div>
 
                   {/* As 3 Escalas de 1 a 7 */}

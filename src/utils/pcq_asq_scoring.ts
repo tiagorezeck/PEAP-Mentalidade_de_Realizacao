@@ -225,12 +225,11 @@ export function calculateASQ(
   answers: Record<number, ASQUserAnswer>,
   participant: ParticipantData = { name: 'Participante' }
 ): ASQReport {
-  // Validar se todas as 12 situações possuem respostas preenchidas
+  // Validar se todas as 12 situações possuem as 3 escalas (1 a 7) preenchidas
   for (let i = 1; i <= 12; i++) {
     const ans = answers[i];
     if (
       !ans ||
-      !ans.causeText?.trim() ||
       !ans.internality ||
       !ans.stability ||
       !ans.globality ||
